@@ -4,9 +4,21 @@
 A silly idea I had to track the Wifi uptime of Vancouver's SkyTrain
 """
 
-from enum import Enum
-import subprocess as sp
+import sys
 import pickle
+from enum import Enum
+
+if sys.platform == "darwin":
+    import subprocess
+elif sys.platform == "ios":
+    import console
+
+
+def clear():
+    if sys.platform == "darwin":
+        subprocess.run("clear")
+    elif sys.platform == "ios":
+        console.clear()
 
 
 class STLine(Enum):
@@ -37,7 +49,7 @@ class Train:
 class Menu:
     def main_menu(trains: [Train], msg: str = "") -> str:
         """Draw the main menu and return user input"""
-        sp.run("clear")
+        clear()
         print("=========================================")
         print("  Welcome to the SkyTrain Wifi Tracker!")
         print("=========================================")
@@ -52,7 +64,7 @@ class Menu:
 
     def report_menu(trains: [Train]) -> [Train]:
         """Draw the report menu and record user input to memory"""
-        sp.run("clear")
+        clear()
         print("=========================================")
         print("          Report Train Status")
         print("=========================================")
@@ -64,7 +76,7 @@ class Menu:
         if not previously_reported:
             # These menus will only be shown if the train has not been
             # previously reported on
-            sp.run("clear")
+            clear()
             print("=========================================")
             print("          Report Train Status")
             print("=========================================")
@@ -75,7 +87,7 @@ class Menu:
             print("Enter answer(1, 2, 3)")
             train_gen: STGen = int(input("-> "))
 
-            sp.run("clear")
+            clear()
             print("=========================================")
             print("          Report Train Status")
             print("=========================================")
@@ -85,7 +97,7 @@ class Menu:
             print("Enter answer (1, 2):")
             train_line: STLine = int(input("-> "))
 
-        sp.run("clear")
+        clear()
         print("=========================================")
         print("          Report Train Status")
         print("=========================================")
@@ -111,7 +123,7 @@ class Menu:
 
     def get_train_stats_menu(trains: [Train]):
         """Show the Wifi status of a given train"""
-        sp.run("clear")
+        clear()
         print("=========================================")
         print("            Get Train Status")
         print("=========================================")
@@ -128,7 +140,7 @@ class Menu:
         train_idx: int = [train.id for train in trains].index(train_id)
         train = trains[train_idx]
 
-        sp.run("clear")
+        clear()
         print("=========================================")
         print("            Get Train Status")
         print("=========================================")
@@ -185,7 +197,7 @@ class Menu:
         except ZeroDivisionError:
             mil_uptime: int = 0
 
-        sp.run("clear")
+        clear()
         print("=========================================")
         print("            Get Overall Stats")
         print("=========================================")
@@ -203,7 +215,7 @@ class Menu:
 
 
 if __name__ == "__main__":
-    sp.run("clear")
+    clear()
     has_quit = False
     trains: [Train] = []
 
@@ -225,7 +237,7 @@ if __name__ == "__main__":
             Menu.get_overall_stats_menu(trains)
         elif selection == "4":  # Quit app
             has_quit = True
-            sp.run("clear")
+            clear()
 
             # Try to save data before quitting
             try:
