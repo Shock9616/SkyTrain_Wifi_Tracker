@@ -181,22 +181,38 @@ class Menu:
 
     def get_train_stats_menu(trains: [Train]):
         """Show the Wifi status of a given train"""
-        clear()
-        print("=========================================")
-        print("            Get Train Status")
-        print("=========================================")
-        if len(trains) > 0:
-            print("Enter train # (0 to exit):")
-        else:
-            input("No trains recorded. Press RETURN to continue...")
-            return
-        train_id: int = int(input("-> "))
+        cont: bool = False
+        msg: str = ""
 
-        if train_id == 0:
-            return
+        while not cont:
+            clear()
+            print("=========================================")
+            print("            Get Train Status")
+            print("=========================================")
+            if len(trains) > 0:
+                if msg != "":
+                    print(msg)
+                print("Enter train # (0 to exit):")
+            else:
+                input("No trains recorded. Press RETURN to continue...")
+                return
+            usr_input: str = input("-> ")
 
-        train_idx: int = [train.id for train in trains].index(train_id)
-        train = trains[train_idx]
+            if usr_input.isnumeric():
+                train_id: int = int(usr_input)
+
+                if train_id == 0:
+                    return
+
+                try:
+                    train_idx: int = [train.id for train in trains].index(train_id)
+                    train = trains[train_idx]
+                    cont = True
+                    msg = ""
+                except ValueError:
+                    msg = "Train hasn't been recorded. Please try another number"
+            else:
+                msg = "Please enter a number"
 
         clear()
         print("=========================================")
