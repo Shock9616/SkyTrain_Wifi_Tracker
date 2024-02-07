@@ -6,6 +6,7 @@ A silly idea I had to track the Wifi uptime of Vancouver's SkyTrain
 
 from enum import Enum
 import subprocess as sp
+import pickle
 
 
 class STLine(Enum):
@@ -114,8 +115,15 @@ class Menu:
         print("=========================================")
         print("            Get Train Status")
         print("=========================================")
-        print("Enter train #:")
+        if len(trains) > 0:
+            print("Enter train # (0 to exit):")
+        else:
+            input("No trains recorded. Press RETURN to continue...")
+            return
         train_id: int = int(input("-> "))
+
+        if train_id == 0:
+            return
 
         train_idx: int = [train.id for train in trains].index(train_id)
         train = trains[train_idx]
@@ -141,17 +149,41 @@ class Menu:
         mkii: [Train] = [t for t in trains if t.gen == 2]
         mkiii: [Train] = [t for t in trains if t.gen == 3]
         total_uptime_lst: [int] = [train.wifi_uptime for train in trains]
-        total_uptime: int = int(sum(total_uptime_lst) / len(trains))
         mki_uptime_lst: [int] = [train.wifi_uptime for train in mki]
-        mki_uptime: int = int(sum(mki_uptime_lst) / len(mki))
         mkii_uptime_lst: [int] = [train.wifi_uptime for train in mkii]
-        mkii_uptime: [int] = int(sum(mkii_uptime_lst) / len(mkii))
         mkiii_uptime_lst: [int] = [train.wifi_uptime for train in mkiii]
-        mkiii_uptime: int = int(sum(mkiii_uptime_lst) / len(mkiii))
         expo_uptime_lst: [int] = [train.wifi_uptime for train in expo]
-        expo_uptime: int = int(sum(expo_uptime_lst) / len(expo))
         mil_uptime_lst: [int] = [train.wifi_uptime for train in mil]
-        mil_uptime: int = int(sum(mil_uptime_lst) / len(mil))
+
+        try:
+            total_uptime: int = int(sum(total_uptime_lst) / len(trains))
+        except ZeroDivisionError:
+            total_uptime: int = 0
+
+        try:
+            mki_uptime: int = int(sum(mki_uptime_lst) / len(mki))
+        except ZeroDivisionError:
+            mki_uptime: int = 0
+
+        try:
+            mkii_uptime: int = int(sum(mkii_uptime_lst) / len(mkii))
+        except ZeroDivisionError:
+            mkii_uptime: int = 0
+
+        try:
+            mkiii_uptime: int = int(sum(mkiii_uptime_lst) / len(mkiii))
+        except ZeroDivisionError:
+            mkiii_uptime: int = 0
+
+        try:
+            expo_uptime: int = int(sum(expo_uptime_lst) / len(expo))
+        except ZeroDivisionError:
+            expo_uptime: int = 0
+
+        try:
+            mil_uptime: int = int(sum(mil_uptime_lst) / len(mil))
+        except ZeroDivisionError:
+            mil_uptime: int = 0
 
         sp.run("clear")
         print("=========================================")
@@ -173,14 +205,14 @@ class Menu:
 if __name__ == "__main__":
     sp.run("clear")
     has_quit = False
-    trains: [Train] = [
-        Train(100, 2, 1, 2, 3),
-        Train(101, 1, 1, 0, 2),
-        Train(102, 3, 1, 4, 4),
-        Train(103, 2, 2, 3, 3),
-        Train(104, 2, 2, 1, 4),
-        Train(105, 3, 2, 0, 2),
-    ]
+    trains: [Train] = []
+
+    # Try to retrieve data from previous session
+    try:
+        with open("data.pickle", "rb") as file:
+            trains = pickle.load(file)
+    except Exception as ex:
+        print("Error during unpickling:", ex)
 
     while not has_quit:
         selection: str = Menu.main_menu(trains)
@@ -194,5 +226,13 @@ if __name__ == "__main__":
         elif selection == "4":  # Quit app
             has_quit = True
             sp.run("clear")
+
+            # Try to save data before quitting
+            try:
+                with open("data.pickle", "wb") as file:
+                    pickle.dump(trains, file, protocol=pickle.HIGHEST_PROTOCOL)
+            except Exception as ex:
+                print("Error during pickling object:", ex)
+
         else:
             Menu.main_menu("Invalid input. Please enter 1, 2, 3, or 4")
