@@ -24,12 +24,14 @@ def clear():
 class STLine(Enum):
     EXPO = 1
     MILLENIUM = 2
+    CANADA = 3
 
 
 class STGen(Enum):
-    MKI = 1  # Original SkyTrain model from the 1980s
-    MKII = 2  # SkyTrain model from the 2000s
-    MKIII = 3  # SkyTrain model from the 2010s
+    ICTS_MKI = 1  # Original SkyTrain model from the 1980s
+    ART_MKII = 2  # SkyTrain model from the 2000s
+    ART_MKIII = 3  # SkyTrain model from the 2010s
+    EMU = 4  # SkyTrain model for the Canada line
 
 
 class Train:
@@ -80,22 +82,26 @@ class Menu:
             print("=========================================")
             print("          Report Train Status")
             print("=========================================")
-            print("Train generation:")
-            print("  1. MKI   (From the 1980s)")
-            print("  2. MKII  (From the 2000s)")
-            print("  3. MKIII (From the 2010s)")
-            print("Enter answer(1, 2, 3)")
-            train_gen: STGen = int(input("-> "))
-
-            clear()
-            print("=========================================")
-            print("          Report Train Status")
-            print("=========================================")
             print("SkyTrain line:")
             print("  1. Expo Line")
             print("  2. Millenium Line")
-            print("Enter answer (1, 2):")
+            print("  3. Canada Line")
+            print("Enter answer (1, 2, 3):")
             train_line: STLine = int(input("-> "))
+
+            if train_line == 1 or train_line == 2:
+                clear()
+                print("=========================================")
+                print("          Report Train Status")
+                print("=========================================")
+                print("Train generation:")
+                print("  1. MKI   (From the 1980s)")
+                print("  2. MKII  (From the 2000s)")
+                print("  3. MKIII (From the 2010s)")
+                print("Enter answer(1, 2, 3)")
+                train_gen: STGen = int(input("-> "))
+            elif train_line == 3:
+                train_gen: STGen = 4
 
         clear()
         print("=========================================")
@@ -157,15 +163,19 @@ class Menu:
         """Show the overall stats for the whole skytrain system"""
         expo: [Train] = [t for t in trains if t.line == 1]
         mil: [Train] = [t for t in trains if t.line == 2]
+        can: [Train] = [t for t in trains if t.line == 3]
         mki: [Train] = [t for t in trains if t.gen == 1]
         mkii: [Train] = [t for t in trains if t.gen == 2]
         mkiii: [Train] = [t for t in trains if t.gen == 3]
+        emu: [Train] = [t for t in trains if t.gen == 4]
         total_uptime_lst: [int] = [train.wifi_uptime for train in trains]
         mki_uptime_lst: [int] = [train.wifi_uptime for train in mki]
         mkii_uptime_lst: [int] = [train.wifi_uptime for train in mkii]
         mkiii_uptime_lst: [int] = [train.wifi_uptime for train in mkiii]
+        emu_uptime_lst: [int] = [train.wifi_uptime for train in emu]
         expo_uptime_lst: [int] = [train.wifi_uptime for train in expo]
         mil_uptime_lst: [int] = [train.wifi_uptime for train in mil]
+        can_uptime_lst: [int] = [train.wifi_uptime for train in can]
 
         try:
             total_uptime: int = int(sum(total_uptime_lst) / len(trains))
@@ -188,6 +198,11 @@ class Menu:
             mkiii_uptime: int = 0
 
         try:
+            emu_uptime: int = int(sum(emu_uptime_lst) / len(emu))
+        except ZeroDivisionError:
+            emu_uptime: int = 0
+
+        try:
             expo_uptime: int = int(sum(expo_uptime_lst) / len(expo))
         except ZeroDivisionError:
             expo_uptime: int = 0
@@ -197,19 +212,32 @@ class Menu:
         except ZeroDivisionError:
             mil_uptime: int = 0
 
+        try:
+            can_uptime: int = int(sum(can_uptime_lst) / len(can))
+        except ZeroDivisionError:
+            can_uptime: int = 0
+
         clear()
         print("=========================================")
         print("            Get Overall Stats")
         print("=========================================")
         print("----- Train Count -----")
         print(f"Total trains:             {len(trains)}")
-        print(f"MKI/MKII/MKIII:           {len(mki)}/{len(mkii)}/{len(mkiii)}")
-        print(f"Expo Line/Millenium Line: {len(expo)}/{len(mil)}")
+        print(
+            f"MKI/MKII/MKIII/EMU:           {len(mki)}/{len(mkii)}/{len(mkiii)}/{len(emu)}"
+        )
+        print(
+            f"Expo Line/Millenium Line/Canada Line: {len(expo)}/{len(mil)}/{len(can)}"
+        )
         print("")
         print("----- Wifi Uptime -----")
         print(f"Total Wifi uptime:        {total_uptime}%")
-        print(f"MKI/MKII/MKIII:           {mki_uptime}%/{mkii_uptime}%/{mkiii_uptime}%")
-        print(f"Expo Line/Millenium line: {expo_uptime}%/{mil_uptime}%")
+        print(
+            f"MKI/MKII/MKIII/EMU:           {mki_uptime}%/{mkii_uptime}%/{mkiii_uptime}%/{emu_uptime}%"
+        )
+        print(
+            f"Expo Line/Millenium Line/Canada Line: {expo_uptime}%/{mil_uptime}%/{can_uptime}%"
+        )
         print("")
         input("Press RETURN to continue...")
 
