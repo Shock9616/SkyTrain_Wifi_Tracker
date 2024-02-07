@@ -17,3 +17,7 @@ Tracking data is kept in a local file (`data.pickle`) so my data won't be shared
 in real time. I will do my best to periodically push my data to this repo as a
 backup and so that anyone else who actually uses this dumb script doesn't have
 to start from scratch.
+
+If you plan to use this project on any platform other than iOS or macOS, you'll
+need to add your system's function to clear the screen to the `clear()` function
+at the top of the file.
