@@ -158,7 +158,7 @@ class Menu:
             print("Enter answer (1, 2)")
             usr_input: str = input("-> ")
 
-            if usr_input.isnumeric() and (int(usr_input) - 1) in [1, 2]:
+            if usr_input.isnumeric() and int(usr_input) in [1, 2]:
                 has_wifi: int = int(usr_input) - 1
                 msg = ""
                 cont = True
