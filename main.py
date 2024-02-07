@@ -66,52 +66,104 @@ class Menu:
 
     def report_menu(trains: [Train]) -> [Train]:
         """Draw the report menu and record user input to memory"""
-        clear()
-        print("=========================================")
-        print("          Report Train Status")
-        print("=========================================")
-        print("Enter train #:")
-        train_id: int = int(input("-> "))
+        msg: str = ""  # Message to display to user on error
+        cont: bool = False
 
+        while not cont:
+            clear()
+            print("=========================================")
+            print("          Report Train Status")
+            print("=========================================")
+            if msg != "":
+                print(msg)
+            print("Enter train #:")
+            usr_input: str = input("-> ")
+
+            if usr_input.isnumeric():
+                train_id: int = int(usr_input)
+                msg = ""
+                cont = True
+            else:
+                msg = "Please enter a number"
+
+        cont = False
         previously_reported: bool = any(t for t in trains if t.id == train_id)
 
         if not previously_reported:
             # These menus will only be shown if the train has not been
             # previously reported on
-            clear()
-            print("=========================================")
-            print("          Report Train Status")
-            print("=========================================")
-            print("SkyTrain line:")
-            print("  1. Expo Line")
-            print("  2. Millenium Line")
-            print("  3. Canada Line")
-            print("Enter answer (1, 2, 3):")
-            train_line: STLine = int(input("-> "))
-
-            if train_line == 1 or train_line == 2:
+            while not cont:
                 clear()
                 print("=========================================")
                 print("          Report Train Status")
                 print("=========================================")
-                print("Train generation:")
-                print("  1. MKI   (From the 1980s)")
-                print("  2. MKII  (From the 2000s)")
-                print("  3. MKIII (From the 2010s)")
-                print("Enter answer(1, 2, 3)")
-                train_gen: STGen = int(input("-> "))
-            elif train_line == 3:
-                train_gen: STGen = 4
+                if msg != "":
+                    print(msg)
+                print("SkyTrain line:")
+                print("  1. Expo Line")
+                print("  2. Millenium Line")
+                print("  3. Canada Line")
+                print("Enter answer (1, 2, 3):")
+                usr_input: str = input("-> ")
 
-        clear()
-        print("=========================================")
-        print("          Report Train Status")
-        print("=========================================")
-        print("Does this train have working Wifi?")
-        print("  1. No")
-        print("  2. Yes")
-        print("Enter answer (1, 2)")
-        has_wifi: int = int(input("-> ")) - 1
+                if usr_input.isnumeric() and int(usr_input) in [1, 2, 3]:
+                    train_line: STLine = int(usr_input)
+                    msg = ""
+                    cont = True
+                else:
+                    msg = "Please enter the corresponding number"
+
+            cont = False
+            msg = ""
+
+            while not cont:
+                if train_line == 1 or train_line == 2:
+                    clear()
+                    print("=========================================")
+                    print("          Report Train Status")
+                    print("=========================================")
+                    if msg != "":
+                        print(msg)
+                    print("Train generation:")
+                    print("  1. MKI   (From the 1980s)")
+                    print("  2. MKII  (From the 2000s)")
+                    print("  3. MKIII (From the 2010s)")
+                    print("Enter answer(1, 2, 3)")
+                    usr_input: str = input("-> ")
+
+                    if usr_input.isnumeric() and int(usr_input) in [1, 2, 3]:
+                        train_gen: STGen = int(usr_input)
+                        msg = ""
+                        cont = True
+                    else:
+                        msg = "Please enter the corresponding number"
+
+                elif train_line == 3:
+                    train_gen: STGen = 4
+                    cont = True
+
+        cont = False
+        msg = ""
+
+        while not cont:
+            clear()
+            print("=========================================")
+            print("          Report Train Status")
+            print("=========================================")
+            if msg != "":
+                print(msg)
+            print("Does this train have working Wifi?")
+            print("  1. No")
+            print("  2. Yes")
+            print("Enter answer (1, 2)")
+            usr_input: str = input("-> ")
+
+            if usr_input.isnumeric() and (int(usr_input) - 1) in [1, 2]:
+                has_wifi: int = int(usr_input) - 1
+                msg = ""
+                cont = True
+            else:
+                msg = "Please enter the corresponding number"
 
         if previously_reported:
             # If this train was previously reported on, update its stats
