@@ -13,7 +13,7 @@ over half of the currently active trains, I have decided that now is the time to
 share my findings and quit updating the data.
 
 I have converted all the data into the JSON format and sorted the trains by
-their ID number. You can see the data for yourself in `data.json`
+their ID number. You can see the data for yourself in [data.json](data.json)
 
 Overall, I checked 309 of the (estimated) 500 trains. Here are the specifics of
 how they were divided between train generation and line:
