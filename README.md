@@ -6,6 +6,56 @@ regarding Wifi on the SkyTrain (mostly which lines/train generations have the
 highest chance of having functional Wifi), so I created this quick script to
 track these stats as I commute to and from school.
 
+## Findings
+
+Now that my semester is over, and since I've manually checked (I believe) well
+over half of the currently active trains, I have decided that now is the time to
+share my findings and quit updating the data.
+
+I have converted all the data into the JSON format and sorted the trains by
+their ID number. You can see the data for yourself in `data.json`
+
+Overall, I checked 309 of the (estimated) 500 trains. Here are the specifics of
+how they were divided between train generation and line:
+
+| Generation        | Count |
+| ----------------- | ----- |
+| MKI (1980s)       | 122   |
+| MKII (2000s)      | 106   |
+| MKIII (2010s)     | 81    |
+| EMU (Canada Line) | 0     |
+
+| Line            | Count |
+| --------------- | ----- |
+| Expo Line       | 247   |
+| Millennium Line | 62    |
+| Canada Line     | 0     |
+
+---
+
+Across all lines and generations (that I checked) there was a 21% chance that
+any given train I boarded would have working Wifi. Here is how that number is
+divided between train generation and line:
+
+| Generation        | Wifi Uptime       |
+| ----------------- | ----------------- |
+| MKI (1980s)       | 0%                |
+| MKII (2000s)      | 61%               |
+| MKIII (2010s)     | 0%                |
+| EMU (Canada Line) | 0% (Never tested) |
+
+| Line            | Wifi Uptime       |
+| --------------- | ----------------- |
+| Expo Line       | 15%               |
+| Millennium Line | 44%               |
+| Canada Line     | 0% (Never tested) |
+
+These numbers match up pretty well with my estimates from before I started this
+experiment. Shockingly, only the MKII trains _ever_ had working Wifi. The MKI
+trains, being old and soon to be replaced, are understandable. However I can't
+begin to guess why the newest MKIII trains never had Wifi. I supposed it will
+always be a mystery 😅.
+
 ## Usage
 
 Just clone the repository and run main.py. I am using Python 3.10 so that I can
